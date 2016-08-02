@@ -1,0 +1,596 @@
+var _CiscoCloud$mantl_ui_frontend$Health$isFocused = F2(
+	function (name, focus) {
+		var _p0 = focus;
+		if (_p0.ctor === 'Nothing') {
+			return false;
+		} else {
+			return _elm_lang$core$Native_Utils.eq(name, _p0._0);
+		}
+	});
+var _CiscoCloud$mantl_ui_frontend$Health$hasNotes = function (check) {
+	return !_elm_lang$core$Native_Utils.eq(check.notes, '');
+};
+var _CiscoCloud$mantl_ui_frontend$Health$addCheck = F2(
+	function (check, val) {
+		var _p1 = val;
+		if (_p1.ctor === 'Nothing') {
+			return _elm_lang$core$Maybe$Just(
+				_elm_lang$core$Native_List.fromArray(
+					[check]));
+		} else {
+			return _elm_lang$core$Maybe$Just(
+				A2(_elm_lang$core$List_ops['::'], check, _p1._0));
+		}
+	});
+var _CiscoCloud$mantl_ui_frontend$Health$updateCheckDict = F3(
+	function (selector, check, checks) {
+		return A3(
+			_elm_lang$core$Dict$update,
+			selector(check),
+			_CiscoCloud$mantl_ui_frontend$Health$addCheck(check),
+			checks);
+	});
+var _CiscoCloud$mantl_ui_frontend$Health$groupBy = F2(
+	function (selector, checks) {
+		return A3(
+			_elm_lang$core$List$foldl,
+			_CiscoCloud$mantl_ui_frontend$Health$updateCheckDict(selector),
+			_elm_lang$core$Dict$empty,
+			checks);
+	});
+var _CiscoCloud$mantl_ui_frontend$Health$displayGrouping = function (checks) {
+	return _elm_lang$core$Dict$fromList(
+		A2(
+			_elm_lang$core$List$map,
+			function (_p2) {
+				var _p3 = _p2;
+				var _p5 = _p3._1;
+				var _p4 = _p3._0;
+				return _elm_lang$core$Native_Utils.eq(_p4, '') ? {ctor: '_Tuple2', _0: 'consul', _1: _p5} : {ctor: '_Tuple2', _0: _p4, _1: _p5};
+			},
+			_elm_lang$core$Dict$toList(
+				A2(
+					_CiscoCloud$mantl_ui_frontend$Health$groupBy,
+					function (_) {
+						return _.serviceName;
+					},
+					checks))));
+};
+var _CiscoCloud$mantl_ui_frontend$Health$attributes = function (attrs) {
+	return A2(
+		_elm_lang$html$Html$dl,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('attributes')
+			]),
+		A2(
+			_elm_lang$core$List$map,
+			function (_p6) {
+				var _p7 = _p6;
+				return A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('attribute')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$dt,
+							_elm_lang$core$Native_List.fromArray(
+								[]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text(_p7._0)
+								])),
+							A2(
+							_elm_lang$html$Html$dd,
+							_elm_lang$core$Native_List.fromArray(
+								[]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									A2(
+									_elm_lang$html$Html$code,
+									_elm_lang$core$Native_List.fromArray(
+										[]),
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_elm_lang$html$Html$text(_p7._1)
+										]))
+								]))
+						]));
+			},
+			attrs));
+};
+var _CiscoCloud$mantl_ui_frontend$Health$statusToString = function (status) {
+	var _p8 = status;
+	if (_p8.ctor === 'Other') {
+		return A2(_elm_lang$core$Basics_ops['++'], 'Unknown Status: ', _p8._0);
+	} else {
+		return _elm_lang$core$Basics$toString(status);
+	}
+};
+var _CiscoCloud$mantl_ui_frontend$Health$statusToClass = function (status) {
+	var _p9 = status;
+	switch (_p9.ctor) {
+		case 'Passing':
+			return 'passing';
+		case 'Unknown':
+			return 'unknown';
+		case 'Warning':
+			return 'warning';
+		case 'Critical':
+			return 'critical';
+		default:
+			return 'other';
+	}
+};
+var _CiscoCloud$mantl_ui_frontend$Health$healthDot = F2(
+	function (status, size) {
+		return A2(
+			_elm_lang$html$Html$span,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							'healthdot',
+							size,
+							_CiscoCloud$mantl_ui_frontend$Health$statusToClass(status)
+						]))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text(
+					_CiscoCloud$mantl_ui_frontend$Health$statusToString(status))
+				]));
+	});
+var _CiscoCloud$mantl_ui_frontend$Health$checkDetail = function (check) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						'check',
+						'card',
+						'card-block',
+						_CiscoCloud$mantl_ui_frontend$Health$statusToClass(check.status)
+					]))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$h2,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(check.name)
+					])),
+				_CiscoCloud$mantl_ui_frontend$Health$attributes(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						{
+						ctor: '_Tuple2',
+						_0: 'Status',
+						_1: _CiscoCloud$mantl_ui_frontend$Health$statusToString(check.status)
+					},
+						{ctor: '_Tuple2', _0: 'Check ID', _1: check.checkID},
+						{ctor: '_Tuple2', _0: 'Node', _1: check.node},
+						{ctor: '_Tuple2', _0: 'Service ID', _1: check.serviceID},
+						{ctor: '_Tuple2', _0: 'Service Name', _1: check.serviceName}
+					])),
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$classList(
+						_elm_lang$core$Native_List.fromArray(
+							[
+								{ctor: '_Tuple2', _0: 'notes', _1: true},
+								{
+								ctor: '_Tuple2',
+								_0: 'hidden',
+								_1: _elm_lang$core$Basics$not(
+									A2(
+										_elm_lang$core$Debug$log,
+										'has notes',
+										_CiscoCloud$mantl_ui_frontend$Health$hasNotes(check)))
+							}
+							]))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$strong,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Notes: ')
+							])),
+						_elm_lang$html$Html$text(check.notes)
+					])),
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$strong,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Output:')
+							]))
+					])),
+				A2(
+				_elm_lang$html$Html$pre,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('output')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$code,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(check.output)
+							]))
+					]))
+			]));
+};
+var _CiscoCloud$mantl_ui_frontend$Health$Check = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {node: a, checkID: b, name: c, status: d, notes: e, output: f, serviceID: g, serviceName: h};
+	});
+var _CiscoCloud$mantl_ui_frontend$Health$Model = F3(
+	function (a, b, c) {
+		return {status: a, checks: b, error: c};
+	});
+var _CiscoCloud$mantl_ui_frontend$Health$Other = function (a) {
+	return {ctor: 'Other', _0: a};
+};
+var _CiscoCloud$mantl_ui_frontend$Health$Critical = {ctor: 'Critical'};
+var _CiscoCloud$mantl_ui_frontend$Health$Warning = {ctor: 'Warning'};
+var _CiscoCloud$mantl_ui_frontend$Health$Unknown = {ctor: 'Unknown'};
+var _CiscoCloud$mantl_ui_frontend$Health$worstStatus = function (checks) {
+	return A2(
+		_elm_lang$core$Maybe$withDefault,
+		_CiscoCloud$mantl_ui_frontend$Health$Unknown,
+		_elm_lang$core$List$head(
+			A2(
+				_elm_lang$core$List$sortBy,
+				function (s) {
+					var _p10 = s;
+					switch (_p10.ctor) {
+						case 'Critical':
+							return 0;
+						case 'Warning':
+							return 1;
+						case 'Unknown':
+							return 2;
+						case 'Passing':
+							return 3;
+						default:
+							return 4;
+					}
+				},
+				A2(
+					_elm_lang$core$List$map,
+					function (_) {
+						return _.status;
+					},
+					checks))));
+};
+var _CiscoCloud$mantl_ui_frontend$Health$checkSelector = F3(
+	function (name, checks, active) {
+		return A2(
+			_elm_lang$html$Html$a,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$classList(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							{ctor: '_Tuple2', _0: 'service', _1: true},
+							{ctor: '_Tuple2', _0: 'card', _1: true},
+							{ctor: '_Tuple2', _0: 'card-block', _1: true},
+							{
+							ctor: '_Tuple2',
+							_0: _CiscoCloud$mantl_ui_frontend$Health$statusToClass(
+								_CiscoCloud$mantl_ui_frontend$Health$worstStatus(checks)),
+							_1: true
+						},
+							{ctor: '_Tuple2', _0: 'active', _1: active}
+						])),
+					_elm_lang$html$Html_Attributes$href(
+					_CiscoCloud$mantl_ui_frontend$Route$urlFor(
+						_CiscoCloud$mantl_ui_frontend$Route$HealthCheck(name)))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text(name)
+				]));
+	});
+var _CiscoCloud$mantl_ui_frontend$Health$statusForService = function (name) {
+	return function (_p11) {
+		return _CiscoCloud$mantl_ui_frontend$Health$worstStatus(
+			A2(
+				_elm_lang$core$Maybe$withDefault,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				A2(
+					_elm_lang$core$Dict$get,
+					name,
+					_CiscoCloud$mantl_ui_frontend$Health$displayGrouping(
+						function (_) {
+							return _.checks;
+						}(_p11)))));
+	};
+};
+var _CiscoCloud$mantl_ui_frontend$Health$Passing = {ctor: 'Passing'};
+var _CiscoCloud$mantl_ui_frontend$Health$statusDecoder = A2(
+	_elm_lang$core$Json_Decode$customDecoder,
+	_elm_lang$core$Json_Decode$string,
+	function (status) {
+		var _p12 = status;
+		switch (_p12) {
+			case 'passing':
+				return _elm_lang$core$Result$Ok(_CiscoCloud$mantl_ui_frontend$Health$Passing);
+			case 'unknown':
+				return _elm_lang$core$Result$Ok(_CiscoCloud$mantl_ui_frontend$Health$Unknown);
+			case 'warning':
+				return _elm_lang$core$Result$Ok(_CiscoCloud$mantl_ui_frontend$Health$Warning);
+			case 'critical':
+				return _elm_lang$core$Result$Ok(_CiscoCloud$mantl_ui_frontend$Health$Critical);
+			default:
+				return _elm_lang$core$Result$Ok(
+					_CiscoCloud$mantl_ui_frontend$Health$Other(status));
+		}
+	});
+var _CiscoCloud$mantl_ui_frontend$Health$healthCheckDecoder = A9(
+	_elm_lang$core$Json_Decode$object8,
+	_CiscoCloud$mantl_ui_frontend$Health$Check,
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'Node', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'CheckID', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'Name', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'Status', _CiscoCloud$mantl_ui_frontend$Health$statusDecoder),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'Notes', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'Output', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'ServiceID', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'ServiceName', _elm_lang$core$Json_Decode$string));
+var _CiscoCloud$mantl_ui_frontend$Health$LoadChecks = {ctor: 'LoadChecks'};
+var _CiscoCloud$mantl_ui_frontend$Health$view = F2(
+	function (model, focus) {
+		var content = function () {
+			if (_elm_lang$core$List$isEmpty(model.checks)) {
+				return A2(
+					_elm_lang$html$Html$p,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('col-sm-12')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text('No Health Checks loaded')
+						]));
+			} else {
+				var groups = _CiscoCloud$mantl_ui_frontend$Health$displayGrouping(model.checks);
+				var focusedGroup = function () {
+					var _p13 = focus;
+					if (_p13.ctor === 'Nothing') {
+						return _elm_lang$core$Maybe$Nothing;
+					} else {
+						return A2(_elm_lang$core$Dict$get, _p13._0, groups);
+					}
+				}();
+				var focusContent = function () {
+					var _p14 = {ctor: '_Tuple2', _0: focus, _1: focusedGroup};
+					if (_p14._0.ctor === 'Nothing') {
+						return A2(
+							_elm_lang$html$Html$div,
+							_elm_lang$core$Native_List.fromArray(
+								[]),
+							_elm_lang$core$Native_List.fromArray(
+								[]));
+					} else {
+						if (_p14._1.ctor === 'Nothing') {
+							return A2(
+								_elm_lang$html$Html$div,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										A2(
+										_elm_lang$html$Html$h1,
+										_elm_lang$core$Native_List.fromArray(
+											[]),
+										_elm_lang$core$Native_List.fromArray(
+											[
+												_elm_lang$html$Html$text(
+												A2(_elm_lang$core$Basics_ops['++'], 'No health checks found for ', _p14._0._0))
+											]))
+									]));
+						} else {
+							var _p15 = _p14._1._0;
+							return A2(
+								_elm_lang$html$Html$div,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										A2(
+										_elm_lang$html$Html$h1,
+										_elm_lang$core$Native_List.fromArray(
+											[]),
+										_elm_lang$core$Native_List.fromArray(
+											[
+												A2(
+												_CiscoCloud$mantl_ui_frontend$Health$healthDot,
+												_CiscoCloud$mantl_ui_frontend$Health$worstStatus(_p15),
+												'large'),
+												_elm_lang$html$Html$text(_p14._0._0)
+											])),
+										A2(
+										_elm_lang$html$Html$div,
+										_elm_lang$core$Native_List.fromArray(
+											[
+												_elm_lang$html$Html_Attributes$class('checks')
+											]),
+										A2(_elm_lang$core$List$map, _CiscoCloud$mantl_ui_frontend$Health$checkDetail, _p15))
+									]));
+						}
+					}
+				}();
+				return A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('col-sm-12')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$div,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+									_elm_lang$core$Native_List.fromArray(
+										['row', 'controls']))
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									A2(
+									_elm_lang$html$Html$div,
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_elm_lang$html$Html_Attributes$class('col-sm-12')
+										]),
+									_elm_lang$core$Native_List.fromArray(
+										[
+											A2(
+											_elm_lang$html$Html$button,
+											_elm_lang$core$Native_List.fromArray(
+												[
+													_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+													_elm_lang$core$Native_List.fromArray(
+														['btn', 'btn-sm', 'btn-secondary'])),
+													_elm_lang$html$Html_Events$onClick(_CiscoCloud$mantl_ui_frontend$Health$LoadChecks)
+												]),
+											_elm_lang$core$Native_List.fromArray(
+												[
+													_elm_lang$html$Html$text('Reload Health Checks')
+												]))
+										]))
+								])),
+							A2(
+							_elm_lang$html$Html$div,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+									_elm_lang$core$Native_List.fromArray(
+										['row', 'healthchecks']))
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									A2(
+									_elm_lang$html$Html$div,
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+											_elm_lang$core$Native_List.fromArray(
+												['services', 'col-md-3']))
+										]),
+									A2(
+										_elm_lang$core$List$map,
+										function (_p16) {
+											var _p17 = _p16;
+											var _p18 = _p17._0;
+											return A3(
+												_CiscoCloud$mantl_ui_frontend$Health$checkSelector,
+												_p18,
+												_p17._1,
+												A2(_CiscoCloud$mantl_ui_frontend$Health$isFocused, _p18, focus));
+										},
+										_elm_lang$core$Dict$toList(groups))),
+									A2(
+									_elm_lang$html$Html$div,
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_elm_lang$html$Html_Attributes$class('col-md-9')
+										]),
+									_elm_lang$core$Native_List.fromArray(
+										[focusContent]))
+								]))
+						]));
+			}
+		}();
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$class('row')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[content]));
+	});
+var _CiscoCloud$mantl_ui_frontend$Health$NewChecks = function (a) {
+	return {ctor: 'NewChecks', _0: a};
+};
+var _CiscoCloud$mantl_ui_frontend$Health$loadHealth = A2(
+	_NoRedInk$elm_task_extra$Task_Extra$performFailproof,
+	_CiscoCloud$mantl_ui_frontend$Health$NewChecks,
+	_elm_lang$core$Task$toMaybe(
+		A2(
+			_evancz$elm_http$Http$get,
+			_elm_lang$core$Json_Decode$list(_CiscoCloud$mantl_ui_frontend$Health$healthCheckDecoder),
+			'/consul/v1/health/state/any')));
+var _CiscoCloud$mantl_ui_frontend$Health$init = A2(
+	_elm_lang$core$Platform_Cmd_ops['!'],
+	{
+		status: _CiscoCloud$mantl_ui_frontend$Health$Unknown,
+		checks: _elm_lang$core$Native_List.fromArray(
+			[]),
+		error: _elm_lang$core$Maybe$Nothing
+	},
+	_elm_lang$core$Native_List.fromArray(
+		[_CiscoCloud$mantl_ui_frontend$Health$loadHealth]));
+var _CiscoCloud$mantl_ui_frontend$Health$update = F2(
+	function (action, model) {
+		var _p19 = action;
+		if (_p19.ctor === 'NewChecks') {
+			if (_p19._0.ctor === 'Nothing') {
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							error: _elm_lang$core$Maybe$Just('Could not retrieve health checks')
+						}),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			} else {
+				var _p20 = _p19._0._0;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							checks: _p20,
+							status: _CiscoCloud$mantl_ui_frontend$Health$worstStatus(_p20),
+							error: _elm_lang$core$Maybe$Nothing
+						}),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			}
+		} else {
+			return {ctor: '_Tuple2', _0: model, _1: _CiscoCloud$mantl_ui_frontend$Health$loadHealth};
+		}
+	});

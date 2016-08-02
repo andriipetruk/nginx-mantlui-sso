@@ -1,0 +1,9 @@
+var _CiscoCloud$mantl_ui_frontend$Attributes$classes = function (cs) {
+	return _elm_lang$html$Html_Attributes$classList(
+		A2(
+			_elm_lang$core$List$map,
+			function (m) {
+				return {ctor: '_Tuple2', _0: m, _1: true};
+			},
+			cs));
+};

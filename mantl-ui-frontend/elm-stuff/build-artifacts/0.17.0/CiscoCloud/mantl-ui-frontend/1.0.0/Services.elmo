@@ -1,0 +1,218 @@
+var _CiscoCloud$mantl_ui_frontend$Services$serviceView = F2(
+	function (health, service) {
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+					_elm_lang$core$Native_List.fromArray(
+						['col-sm-3', 'service'])),
+					A2(_elm_lang$html$Html_Attributes$attribute, 'id', service.id),
+					_elm_lang$html$Html_Attributes$style(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							{ctor: '_Tuple2', _0: 'display', _1: 'none'}
+						]))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+							_elm_lang$core$Native_List.fromArray(
+								['card', 'card-block']))
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$div,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$class('logo')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									A2(
+									_elm_lang$html$Html$div,
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_elm_lang$html$Html_Attributes$class(service.id)
+										]),
+									_elm_lang$core$Native_List.fromArray(
+										[]))
+								])),
+							A2(
+							_elm_lang$html$Html$h4,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$class('card-title')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text(service.name)
+								])),
+							A2(
+							_elm_lang$html$Html$a,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+									_elm_lang$core$Native_List.fromArray(
+										['btn', 'btn-block', 'btn-primary'])),
+									_elm_lang$html$Html_Attributes$href(service.path)
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('Web UI')
+								])),
+							A2(
+							_elm_lang$html$Html$a,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+									_elm_lang$core$Native_List.fromArray(
+										[
+											'btn',
+											'btn-block',
+											'btn-health',
+											_CiscoCloud$mantl_ui_frontend$Health$statusToClass(health)
+										])),
+									_elm_lang$html$Html_Attributes$href(
+									_CiscoCloud$mantl_ui_frontend$Route$urlFor(
+										_CiscoCloud$mantl_ui_frontend$Route$HealthCheck(service.check)))
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text(
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										'Checks: ',
+										_CiscoCloud$mantl_ui_frontend$Health$statusToString(health)))
+								]))
+						]))
+				]));
+	});
+var _CiscoCloud$mantl_ui_frontend$Services$Service = F4(
+	function (a, b, c, d) {
+		return {name: a, id: b, check: c, path: d};
+	});
+var _CiscoCloud$mantl_ui_frontend$Services$serviceDecoder = A5(
+	_elm_lang$core$Json_Decode$object4,
+	_CiscoCloud$mantl_ui_frontend$Services$Service,
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'check', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'path', _elm_lang$core$Json_Decode$string));
+var _CiscoCloud$mantl_ui_frontend$Services$NewServices = function (a) {
+	return {ctor: 'NewServices', _0: a};
+};
+var _CiscoCloud$mantl_ui_frontend$Services$loadServices = A2(
+	_NoRedInk$elm_task_extra$Task_Extra$performFailproof,
+	_CiscoCloud$mantl_ui_frontend$Services$NewServices,
+	_elm_lang$core$Task$toMaybe(
+		A2(
+			_evancz$elm_http$Http$get,
+			_elm_lang$core$Json_Decode$list(_CiscoCloud$mantl_ui_frontend$Services$serviceDecoder),
+			'/_internal/services.json')));
+var _CiscoCloud$mantl_ui_frontend$Services$init = {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _CiscoCloud$mantl_ui_frontend$Services$loadServices};
+var _CiscoCloud$mantl_ui_frontend$Services$update = F2(
+	function (action, model) {
+		var _p0 = action;
+		if (_p0.ctor === 'NewServices') {
+			return A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				_p0._0,
+				_elm_lang$core$Native_List.fromArray(
+					[]));
+		} else {
+			return {ctor: '_Tuple2', _0: model, _1: _CiscoCloud$mantl_ui_frontend$Services$loadServices};
+		}
+	});
+var _CiscoCloud$mantl_ui_frontend$Services$LoadServices = {ctor: 'LoadServices'};
+var _CiscoCloud$mantl_ui_frontend$Services$view = F2(
+	function (model, health) {
+		var content = function () {
+			var _p1 = model;
+			if (_p1.ctor === 'Nothing') {
+				return A2(
+					_elm_lang$html$Html$p,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('col-sm-12')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text('No services loaded')
+						]));
+			} else {
+				return A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('col-sm-12')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$div,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+									_elm_lang$core$Native_List.fromArray(
+										['row', 'controls']))
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									A2(
+									_elm_lang$html$Html$div,
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_elm_lang$html$Html_Attributes$class('col-sm-12')
+										]),
+									_elm_lang$core$Native_List.fromArray(
+										[
+											A2(
+											_elm_lang$html$Html$button,
+											_elm_lang$core$Native_List.fromArray(
+												[
+													_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+													_elm_lang$core$Native_List.fromArray(
+														['btn', 'btn-sm', 'btn-secondary'])),
+													_elm_lang$html$Html_Events$onClick(_CiscoCloud$mantl_ui_frontend$Services$LoadServices)
+												]),
+											_elm_lang$core$Native_List.fromArray(
+												[
+													_elm_lang$html$Html$text('Reload Services')
+												]))
+										]))
+								])),
+							A2(
+							_elm_lang$html$Html$div,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+									_elm_lang$core$Native_List.fromArray(
+										['row', 'services']))
+								]),
+							A2(
+								_elm_lang$core$List$map,
+								function (s) {
+									return A2(
+										_CiscoCloud$mantl_ui_frontend$Services$serviceView,
+										A2(_CiscoCloud$mantl_ui_frontend$Health$statusForService, s.check, health),
+										s);
+								},
+								_p1._0))
+						]));
+			}
+		}();
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$class('row')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[content]));
+	});

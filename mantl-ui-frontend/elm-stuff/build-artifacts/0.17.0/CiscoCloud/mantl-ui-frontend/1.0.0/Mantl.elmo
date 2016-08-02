@@ -1,0 +1,247 @@
+var _CiscoCloud$mantl_ui_frontend$Mantl$updateRoute = F2(
+	function (route, model) {
+		return A2(
+			_elm_lang$core$Platform_Cmd_ops['!'],
+			_elm_lang$core$Native_Utils.update(
+				model,
+				{route: route}),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
+var _CiscoCloud$mantl_ui_frontend$Mantl$Model = F4(
+	function (a, b, c, d) {
+		return {route: a, services: b, version: c, health: d};
+	});
+var _CiscoCloud$mantl_ui_frontend$Mantl$HealthMsg = function (a) {
+	return {ctor: 'HealthMsg', _0: a};
+};
+var _CiscoCloud$mantl_ui_frontend$Mantl$VersionMsg = function (a) {
+	return {ctor: 'VersionMsg', _0: a};
+};
+var _CiscoCloud$mantl_ui_frontend$Mantl$ServicesMsg = function (a) {
+	return {ctor: 'ServicesMsg', _0: a};
+};
+var _CiscoCloud$mantl_ui_frontend$Mantl$init = function (location) {
+	var _p0 = _CiscoCloud$mantl_ui_frontend$Version$init;
+	var version = _p0._0;
+	var vcmd = _p0._1;
+	var _p1 = _CiscoCloud$mantl_ui_frontend$Health$init;
+	var health = _p1._0;
+	var hcmd = _p1._1;
+	var _p2 = _CiscoCloud$mantl_ui_frontend$Services$init;
+	var services = _p2._0;
+	var scmd = _p2._1;
+	var route = _CiscoCloud$mantl_ui_frontend$Route$init(location);
+	return A2(
+		_elm_lang$core$Platform_Cmd_ops['!'],
+		{route: route, services: services, health: health, version: version},
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(_elm_lang$core$Platform_Cmd$map, _CiscoCloud$mantl_ui_frontend$Mantl$ServicesMsg, scmd),
+				A2(_elm_lang$core$Platform_Cmd$map, _CiscoCloud$mantl_ui_frontend$Mantl$HealthMsg, hcmd),
+				A2(_elm_lang$core$Platform_Cmd$map, _CiscoCloud$mantl_ui_frontend$Mantl$VersionMsg, vcmd)
+			]));
+};
+var _CiscoCloud$mantl_ui_frontend$Mantl$update = F2(
+	function (action, model) {
+		var _p3 = action;
+		switch (_p3.ctor) {
+			case 'Refresh':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(_elm_lang$core$Platform_Cmd$map, _CiscoCloud$mantl_ui_frontend$Mantl$VersionMsg, _CiscoCloud$mantl_ui_frontend$Version$loadVersion),
+							A2(_elm_lang$core$Platform_Cmd$map, _CiscoCloud$mantl_ui_frontend$Mantl$HealthMsg, _CiscoCloud$mantl_ui_frontend$Health$loadHealth),
+							A2(_elm_lang$core$Platform_Cmd$map, _CiscoCloud$mantl_ui_frontend$Mantl$ServicesMsg, _CiscoCloud$mantl_ui_frontend$Services$loadServices)
+						]));
+			case 'ServicesMsg':
+				var _p4 = A2(_CiscoCloud$mantl_ui_frontend$Services$update, _p3._0, model.services);
+				var services = _p4._0;
+				var cmd = _p4._1;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{services: services}),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(_elm_lang$core$Platform_Cmd$map, _CiscoCloud$mantl_ui_frontend$Mantl$ServicesMsg, cmd)
+						]));
+			case 'VersionMsg':
+				var _p5 = A2(_CiscoCloud$mantl_ui_frontend$Version$update, _p3._0, model.version);
+				var version = _p5._0;
+				var cmd = _p5._1;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{version: version}),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(_elm_lang$core$Platform_Cmd$map, _CiscoCloud$mantl_ui_frontend$Mantl$VersionMsg, cmd)
+						]));
+			default:
+				var _p6 = A2(_CiscoCloud$mantl_ui_frontend$Health$update, _p3._0, model.health);
+				var health = _p6._0;
+				var cmd = _p6._1;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{health: health}),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(_elm_lang$core$Platform_Cmd$map, _CiscoCloud$mantl_ui_frontend$Mantl$HealthMsg, cmd)
+						]));
+		}
+	});
+var _CiscoCloud$mantl_ui_frontend$Mantl$view = function (model) {
+	var body = function () {
+		var _p7 = model.route;
+		if (_p7.ctor === 'Just') {
+			switch (_p7._0.ctor) {
+				case 'Home':
+					return A2(
+						_elm_lang$html$Html_App$map,
+						_CiscoCloud$mantl_ui_frontend$Mantl$ServicesMsg,
+						A2(_CiscoCloud$mantl_ui_frontend$Services$view, model.services, model.health));
+				case 'HealthOverview':
+					return A2(
+						_elm_lang$html$Html_App$map,
+						_CiscoCloud$mantl_ui_frontend$Mantl$HealthMsg,
+						A2(_CiscoCloud$mantl_ui_frontend$Health$view, model.health, _elm_lang$core$Maybe$Nothing));
+				default:
+					return A2(
+						_elm_lang$html$Html_App$map,
+						_CiscoCloud$mantl_ui_frontend$Mantl$HealthMsg,
+						A2(
+							_CiscoCloud$mantl_ui_frontend$Health$view,
+							model.health,
+							_elm_lang$core$Maybe$Just(_p7._0._0)));
+			}
+		} else {
+			return _CiscoCloud$mantl_ui_frontend$Route$notfound;
+		}
+	}();
+	var link = F2(
+		function (page, caption) {
+			return A3(_CiscoCloud$mantl_ui_frontend$Route$navItem, model.route, page, caption);
+		});
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('app')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_CiscoCloud$mantl_ui_frontend$Version$notification(model.version),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+						_elm_lang$core$Native_List.fromArray(
+							['navbar', 'navbar-inverted']))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$div,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('container')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								A2(
+								_elm_lang$html$Html$a,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html_Attributes$class('navbar-brand'),
+										_elm_lang$html$Html_Attributes$href(
+										_CiscoCloud$mantl_ui_frontend$Route$urlFor(_CiscoCloud$mantl_ui_frontend$Route$Home))
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('Mantl')
+									])),
+								A2(
+								_elm_lang$html$Html$ul,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+										_elm_lang$core$Native_List.fromArray(
+											['nav', 'navbar-nav']))
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										A2(link, _CiscoCloud$mantl_ui_frontend$Route$Home, 'Home'),
+										A2(link, _CiscoCloud$mantl_ui_frontend$Route$HealthOverview, 'Health')
+									])),
+								A2(
+								_elm_lang$html$Html$div,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+										_elm_lang$core$Native_List.fromArray(
+											['nav', 'navbar-nav', 'pull-right']))
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										A2(
+										_elm_lang$html$Html$a,
+										_elm_lang$core$Native_List.fromArray(
+											[
+												_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+												_elm_lang$core$Native_List.fromArray(
+													[
+														'nav-item',
+														'nav-link',
+														'health',
+														_CiscoCloud$mantl_ui_frontend$Health$statusToClass(model.health.status)
+													])),
+												_elm_lang$html$Html_Attributes$href(
+												_CiscoCloud$mantl_ui_frontend$Route$urlFor(_CiscoCloud$mantl_ui_frontend$Route$HealthOverview))
+											]),
+										_elm_lang$core$Native_List.fromArray(
+											[
+												A2(_CiscoCloud$mantl_ui_frontend$Health$healthDot, model.health.status, 'small'),
+												_elm_lang$html$Html$text(
+												_CiscoCloud$mantl_ui_frontend$Health$statusToString(model.health.status))
+											]))
+									])),
+								A2(
+								_elm_lang$html$Html$div,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+										_elm_lang$core$Native_List.fromArray(
+											['nav', 'navbar-nav', 'pull-right'])),
+										A2(_elm_lang$html$Html_Attributes$attribute, 'id', 'openam_login')
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[]))
+							]))
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_CiscoCloud$mantl_ui_frontend$Attributes$classes(
+						_elm_lang$core$Native_List.fromArray(
+							['container', 'content']))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						body,
+						A2(
+						_elm_lang$html$Html_App$map,
+						_CiscoCloud$mantl_ui_frontend$Mantl$VersionMsg,
+						_CiscoCloud$mantl_ui_frontend$Version$view(model.version))
+					]))
+			]));
+};
+var _CiscoCloud$mantl_ui_frontend$Mantl$Refresh = {ctor: 'Refresh'};

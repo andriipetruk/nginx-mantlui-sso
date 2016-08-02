@@ -1,0 +1,122 @@
+var _CiscoCloud$mantl_ui_frontend$Route$notfound = A2(
+	_elm_lang$html$Html$div,
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html_Attributes$class('row')
+		]),
+	_elm_lang$core$Native_List.fromArray(
+		[
+			A2(
+			_elm_lang$html$Html$p,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$class('col-sm-12')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text('Not found!')
+				]))
+		]));
+var _CiscoCloud$mantl_ui_frontend$Route$urlFor = function (loc) {
+	var url = function () {
+		var _p0 = loc;
+		switch (_p0.ctor) {
+			case 'Home':
+				return '/';
+			case 'HealthOverview':
+				return '/health/';
+			default:
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					'/health/',
+					A2(_elm_lang$core$Basics_ops['++'], _p0._0, '/'));
+		}
+	}();
+	return A2(_elm_lang$core$Basics_ops['++'], '#', url);
+};
+var _CiscoCloud$mantl_ui_frontend$Route$init = function (location) {
+	return location;
+};
+var _CiscoCloud$mantl_ui_frontend$Route$HealthCheck = function (a) {
+	return {ctor: 'HealthCheck', _0: a};
+};
+var _CiscoCloud$mantl_ui_frontend$Route$HealthOverview = {ctor: 'HealthOverview'};
+var _CiscoCloud$mantl_ui_frontend$Route$parentFor = function (child) {
+	var _p1 = child;
+	if (_p1.ctor === 'HealthCheck') {
+		return _CiscoCloud$mantl_ui_frontend$Route$HealthOverview;
+	} else {
+		return child;
+	}
+};
+var _CiscoCloud$mantl_ui_frontend$Route$navItem = F3(
+	function (model, page, caption) {
+		var active = function () {
+			var _p2 = model;
+			if (_p2.ctor === 'Nothing') {
+				return false;
+			} else {
+				return _elm_lang$core$Native_Utils.eq(
+					_CiscoCloud$mantl_ui_frontend$Route$parentFor(_p2._0),
+					page);
+			}
+		}();
+		return A2(
+			_elm_lang$html$Html$li,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$classList(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							{ctor: '_Tuple2', _0: 'nav-item', _1: true},
+							{ctor: '_Tuple2', _0: 'active', _1: active}
+						]))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$a,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('nav-link'),
+							_elm_lang$html$Html_Attributes$href(
+							_CiscoCloud$mantl_ui_frontend$Route$urlFor(page))
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text(caption)
+						]))
+				]));
+	});
+var _CiscoCloud$mantl_ui_frontend$Route$Home = {ctor: 'Home'};
+var _CiscoCloud$mantl_ui_frontend$Route$locFor = function (path) {
+	var segments = A2(
+		_elm_lang$core$List$filter,
+		function (seg) {
+			return (!_elm_lang$core$Native_Utils.eq(seg, '')) && (!_elm_lang$core$Native_Utils.eq(seg, '#'));
+		},
+		A2(_elm_lang$core$String$split, '/', path.hash));
+	var _p3 = segments;
+	_v3_3:
+	do {
+		if (_p3.ctor === '[]') {
+			return _elm_lang$core$Maybe$Just(_CiscoCloud$mantl_ui_frontend$Route$Home);
+		} else {
+			if (_p3._0 === 'health') {
+				if (_p3._1.ctor === '[]') {
+					return _elm_lang$core$Maybe$Just(_CiscoCloud$mantl_ui_frontend$Route$HealthOverview);
+				} else {
+					if (_p3._1._1.ctor === '[]') {
+						return _elm_lang$core$Maybe$Just(
+							_CiscoCloud$mantl_ui_frontend$Route$HealthCheck(_p3._1._0));
+					} else {
+						break _v3_3;
+					}
+				}
+			} else {
+				break _v3_3;
+			}
+		}
+	} while(false);
+	return _elm_lang$core$Maybe$Nothing;
+};

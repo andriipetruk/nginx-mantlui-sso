@@ -1,0 +1,23 @@
+{
+  "name": "mantl-api-webui",
+  "repository": "https://github.com/CiscoCloud/mantl-api-webui",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "appcache-brunch": "^1.7.1",
+    "autoprefixer": "^6.0.3",
+    "body-parser": "^1.14.1",
+    "brunch": "^1.8.5",
+    "brunch-signature": "^1.0.1",
+    "clean-css-brunch": "^1.7.2",
+    "elm-brunch": "^0.3.1",
+    "express": "^4.13.3",
+    "imageoptmizer-brunch": "0.0.6",
+    "javascript-brunch": "^1.8.0",
+    "morgan": "^1.6.1",
+    "postcss-brunch": "^0.5.0",
+    "retina-brunch": "^1.7.2",
+    "sass-brunch": "^1.9.1",
+    "uglify-js-brunch": "^1.7.8",
+    "gzip-brunch": "^1.3.0"
+  }
+}
