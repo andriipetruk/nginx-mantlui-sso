@@ -188,6 +188,33 @@ http {
                    ---ngx.say(labelSelectorQuery)
                    ngx.req.set_uri_args(labelSelectorQuery)
             end
+            --- protect app 
+            if ngx.var.request_method == "DELETE" then
+                 protect_flag = 0
+                if headers["Cookie"] then
+                  local cookies = {}
+                  for k, v in string.gmatch(headers["Cookie"], "([^=]+)=([^;]+);?%s*") do
+                     cookies[k] = v
+                  end
+                  if cookies["HTTP_orga"] then
+                     roles = {}
+                     cookies_orga = cookies["HTTP_orga"]
+                     string.gsub(cookies_orga, "([^|]+)", function(value) roles[#roles + 1] =     value;  end)
+                  end
+                  if cookies["HTTP_org"] then
+                     cookies_org = cookies["HTTP_org"]
+                   end
+                end
+              uri_table = {}
+              for tmp in string.gmatch(request_uri, "[^/]+") do table.insert(uri_table, tmp) end
+              if uri_table[2] ~= cookies_org then protect_flag = 1
+              for i, rolec in ipairs(roles) do 
+                 if uri_table[2] == rolec then protect_flag = 0
+              end
+              if protect_flag then 
+                 ngx.say({"message":"Operation delete for app rejected by protection”})
+               end
+            end
             if ngx.var.request_method == "POST" then
                 if headers["Cookie"] then
                    local cookies = {}
